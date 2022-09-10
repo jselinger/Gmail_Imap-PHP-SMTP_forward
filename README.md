@@ -1,7 +1,7 @@
 # Gmail_Imap-PHP-SMTP_forward
-Targeted for Google Voice SMS to Email
-
-Poll Gmail via IMAP
-Store in SQLLite (de-duping)
-Forward to Email (SMTP)
-(TODO, db auto purge)
+Targeted for Google Voice SMS to Email<br>
+<br>
+Poll Gmail via IMAP<br>
+Store in SQLLite (de-duping)<br>
+Forward to Email (SMTP)<br>
+(TODO, db auto purge)<br>
