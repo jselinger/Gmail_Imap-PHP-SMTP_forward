@@ -21,7 +21,10 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
 ));
 
-## Chcek for Imap Function
+
+#Imap Gmail Function from https://phppot.com/php/gmail-email-inbox-using-php-with-imap/
+
+## Check for Imap Function
     if (! function_exists('imap_open')) {
         echo "IMAP is not configured.";
         exit();
