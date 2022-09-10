@@ -2,6 +2,7 @@
 Targeted for Google Voice SMS to Email<br>
 <br>
 Poll Gmail via IMAP [Use App Passwords https://support.google.com/accounts/answer/185833?hl=en ]<br>
+Started with Code from [https://phppot.com/php/gmail-email-inbox-using-php-with-imap/]<br>
 Store in SQLLite (de-duping)<br>
 Forward to Email (SMTP)<br>
 (TODO, db auto purge)<br>
