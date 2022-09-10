@@ -31,7 +31,7 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
     <?php
         
         /* Connecting Gmail server with IMAP  novalidate-cert  Creds in Config*/
-        $connection = imap_open('{imap.gmail.com:993/imap/ssl/novalidate-cert}INBOX', $Imap-Username, $Imap-Password) or die('Cannot connect to Gmail: ' . imap_last_error());
+        $connection = imap_open('{imap.gmail.com:993/imap/ssl/novalidate-cert}INBOX', $Imap_Username, $Imap_Password) or die('Cannot connect to Gmail: ' . imap_last_error());
         
         /* Search Emails having the specified keyword in the email subject */
         # $emailData = imap_search($connection, 'SUBJECT "Article "');
@@ -124,10 +124,10 @@ function JS_PHPMailer_SMTP1($Subject, $Body)
 		//Server settings
 		#$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
 		$mail->isSMTP();                                            //Send using SMTP
-		$mail->Host       = $SMTP-SendingServer;                     //Set the SMTP server to send through
+		$mail->Host       = $SMTP_SendingServer;                     //Set the SMTP server to send through
 		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		$mail->Username   = $SMTP-Username;                     //SMTP username
-		$mail->Password   = $SMTP-Password;                               //SMTP password
+		$mail->Username   = $SMTP_Username;                     //SMTP username
+		$mail->Password   = $SMTP_Password;                               //SMTP password
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 		$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
