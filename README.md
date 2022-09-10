@@ -1,7 +1,7 @@
 # Gmail_Imap-PHP-SMTP_forward
 Targeted for Google Voice SMS to Email<br>
 <br>
-Poll Gmail via IMAP<br>
+Poll Gmail via IMAP [Use App Passwords https://support.google.com/accounts/answer/185833?hl=en ]<br>
 Store in SQLLite (de-duping)<br>
 Forward to Email (SMTP)<br>
 (TODO, db auto purge)<br>
