@@ -50,6 +50,7 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
                 #$message = imap_fetchbody($connection, $emailIdent, '1.1');  # this didnt work for Gmail
 				$message = imap_fetchbody($connection, $emailIdent, '1');
 				$message2 = imap_fetchbody($connection, $emailIdent, '2');
+				$message3 = base64_decode ($message);
                 $messageExcerpt = substr($message, 0, 150);
                 $partialMessage = trim(quoted_printable_decode($messageExcerpt)); 
                 $date = date("d F, Y", strtotime($overview[0]->date));
@@ -64,12 +65,23 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
                     <?php echo $date; ?>
 			</span><span class="message">
 				<?php
-					#imap_fetchbody
-					#print_R($overview[0]);
-					#$message=imap_fetchbody($connection,$overview[0]->message_id);
-					#print_r($message2);
-					#JS_SMTP1($overview[0]->subject, $message2);
-					AddtoSQL ($overview[0]->from, $Subject, $partialMessage, $message2, '', $date);
+				
+				##the Table above and below does not need to be printed to the screen.
+					
+					if ($message3!="") #base64 decode
+					{
+						preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message3, $results)  ; #google Voice Parse 
+					} else {
+						preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message2, $results)  ; #google Voice Parse 
+					}
+					
+					if 	($results[2]!="")
+					{
+						AddtoSQL ($overview[0]->from, $Subject, $results[2], $message2, '', $date);
+					} else {
+						AddtoSQL ($overview[0]->from, $Subject, $partialMessage, $message2, '', $date);
+					}
+					
 				?>
             </span></td>
         </tr>
@@ -91,8 +103,8 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
 function AddtoSQL($Sender, $Subject, $Body, $Message2, $Raw, $date){
 	global $db;
 	
-	$SQLobj = $db->prepare("INSERT OR IGNORE INTO `mdm-mail` ('MID','sender','subject','message1','message2','raw') 
-				VALUES (NULL,:Sender,:subject,:message1,:message2,:raw)");
+	$SQLobj = $db->prepare("INSERT OR IGNORE INTO `mdm-mail` ('MID','sender','subject','message1','message2','raw','eTime') 
+				VALUES (NULL,:Sender,:subject,:message1,:message2,:raw,:eTime)");
 	$SQLobj->bindValue('Sender', $Sender);
 	$SQLobj->bindValue('subject', $Subject);
 	$SQLobj->bindValue('message1', $Body);
