@@ -67,19 +67,29 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
 				<?php
 				
 				##the Table above and below does not need to be printed to the screen.
+					#try all the differnt possible recived blocks looking for the Google Voice SMS part
+					preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message , $results1); #google Voice Parse 
+					preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message3, $results3); #google Voice Parse 
+					preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message2, $results2); #google Voice Parse 
+
+					#preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message , $results1a); #google Voice Parse 
+					#preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message3, $results3a); #google Voice Parse 
+					#preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message2, $results2a); #google Voice Parse 
 					
-					if ($message3!="") #base64 decode
-					{
-						preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message3, $results)  ; #google Voice Parse 
-					} else {
-						preg_match('/<td style="font-size: 14px; line-height: 20px; padding: 25px 0;">(.*?)\<\/td\>/', $message2, $results)  ; #google Voice Parse 
-					}
 					
-					if 	($results[2]!="")
+					
+					if 	     ($results1[1]!="")
 					{
-						AddtoSQL ($overview[0]->from, $Subject, $results[2], $message2, '', $date);
-					} else {
-						AddtoSQL ($overview[0]->from, $Subject, $partialMessage, $message2, '', $date);
+						AddtoSQL ($overview[0]->from, $Subject, $results1[1], $message, $message2, $date, 'R1');
+					} else if($results3[1]!="") 
+					{
+						AddtoSQL ($overview[0]->from, $Subject, $results3[1], $message, $message2, $date, 'R3');
+					} else if($results2[1]!="") 
+					{
+						AddtoSQL ($overview[0]->from, $Subject, $results2[1],  $message, $message2, $date, 'R2');
+					} else 
+					{
+						AddtoSQL ($overview[0]->from, $Subject, $partialMessage, $message, $message2, $date, 'R0');
 					}
 					
 				?>
@@ -100,17 +110,18 @@ $db = new \PDO('sqlite:'.$dbpath, '', '', array(
 
 <?php
 
-function AddtoSQL($Sender, $Subject, $Body, $Message2, $Raw, $date){
+function AddtoSQL($Sender, $Subject, $Body, $Message2, $Raw, $date, $dev=""){
 	global $db;
 	
-	$SQLobj = $db->prepare("INSERT OR IGNORE INTO `mdm-mail` ('MID','sender','subject','message1','message2','raw','eTime') 
-				VALUES (NULL,:Sender,:subject,:message1,:message2,:raw,:eTime)");
+	$SQLobj = $db->prepare("INSERT OR IGNORE INTO `mdm-mail` ('MID','sender','subject','message1','message2','raw','eTime','dev') 
+				VALUES (NULL,:Sender,:subject,:message1,:message2,:raw,:eTime,:dev)");
 	$SQLobj->bindValue('Sender', $Sender);
 	$SQLobj->bindValue('subject', $Subject);
 	$SQLobj->bindValue('message1', $Body);
 	$SQLobj->bindValue('message2', $Message2);
 	$SQLobj->bindValue('raw', $Raw);
 	$SQLobj->bindValue('eTime', $date);
+	$SQLobj->bindValue('dev', $dev);
 	$SQLobj->execute();
 }
 
